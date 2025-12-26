@@ -6,7 +6,7 @@ function App() {
         const fetchProducts = async () => {
             try {
                 const res = await fetch(
-                    "http://localhost:5000/"
+                    "https://full-production-1aa1.up.railway.app/api/users/"
                 );
                 const data = await res.json();
                 setUser(data);
