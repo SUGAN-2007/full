@@ -1,36 +1,30 @@
-import express from 'express'
-import cors from 'cors'
+import express from "express";
+import cors from "cors";
 import mysql from "mysql2";
 
-export const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",      // XAMPP default
-    database: "project_db",
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const db = mysql.createConnection({
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE,
+  port: process.env.MYSQL_PORT,
 });
 
 db.connect(err => {
-    if (err) {
-        console.error("MySQL connection failed", err);
-    } else {
-        console.log("MySQL connected");
-    }
+  if (err) console.error(err);
+  else console.log("MySQL connected");
 });
 
-
-const app = express()
-app.use(cors())
-app.use(express.json());
-
-
-app.use('/',(req, res) => {
+app.get("/api/users", (req, res) => {
   db.query("SELECT * FROM users", (err, data) => {
-    if (err) return res.json(err);
+    if (err) return res.status(500).json(err);
     res.json(data);
   });
+});
 
-})
-
-app.listen(5000, () => {
-    console.log('server running on port')
-})
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log("Server running on", PORT));
