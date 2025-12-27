@@ -28,7 +28,7 @@ app.get("/api/users", (req, res) => {
 });
 app.get("/api/users/:id", (req, res) => {
     const id = req.params.id
-    db.query(`SELECT * FROM user WHERE id = ${id} ;`, (err, data) => {
+    db.query("SELECT * FROM user WHERE id = ? ;",[id], (err, data) => {
         if (err) return res.status(500).json(err);
         res.json(data);
     });
